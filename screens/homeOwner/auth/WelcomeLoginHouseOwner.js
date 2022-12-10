@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import {Text,StyleSheet,TouchableOpacity,Image, ScrollView,
-Pressable,TouchableHighlight,View,} from "react-native";
+import {
+  Text, StyleSheet, TouchableOpacity, Image, ScrollView,
+  Pressable, TouchableHighlight, View,
+} from "react-native";
 import { TextInput as RNPTextInput } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import { useTogglePasswordVisibility } from "../../../hooks/TogglePassword.js";
 import axios from "axios";
 import link from "../../../Link.js";
 
-const WelcomeLoginHouseOwner = ({cb1}) => {
+const WelcomeLoginHouseOwner = (props) => {
   const navigation = useNavigation();
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
@@ -17,6 +18,7 @@ const WelcomeLoginHouseOwner = ({cb1}) => {
     email: "",
     password: "",
   });
+  const [userData, setUserData] = useState([])
 
   const handleChange = (value, name) => {
     setOnLogin({
@@ -29,13 +31,20 @@ const WelcomeLoginHouseOwner = ({cb1}) => {
     axios
       .post(`${link}/owner/login`, onLogin)
       .then((response) => {
-        console.log(onLogin);
+        setUserData(response.data)
+        alert("Welcome to TAP HOME ...   ")
+        // console.log(userData,"login response");
         setOnLogin(response.data)
-        navigation.navigate("HomePageStudent")
+
+        navigation.navigate("HomePageStudent", { info: response.data })
       })
-      .catch((error)=> console.log(error.message))
+      .catch((error) => {
+        if (error.message === "Request failed with status code 401") {
+          alert('Email or password is incorrect please check it again ..!')
+        }
+      })
   };
-// console.log(cb1);
+  console.log(props, "<====id from signIn");
   return (
     <View style={styles.welcomeLoginHouseOwner}>
       <Text style={styles.welcomeBackText1}>
@@ -81,6 +90,7 @@ const WelcomeLoginHouseOwner = ({cb1}) => {
         minLength={8}
         enablesReturnKeyAutomatically={true}
         autoCorrect={false}
+        autoCapitalize="none"
         secureTextEntry={passwordVisibility}
         theme={{ colors: { background: "#d9d9d9" } }}
         onChangeText={(text) => handleChange(text, "password")}
@@ -97,6 +107,7 @@ const WelcomeLoginHouseOwner = ({cb1}) => {
         style={styles.rectangleRNPTextInput1}
         placeholder="Enter Your Email"
         mode="outlined"
+        autoCapitalize="none"
         keyboardType="default"
         theme={{ colors: { background: "#d9d9d9" } }}
         onChangeText={(text) => handleChange(text, "email")}
@@ -124,7 +135,7 @@ const WelcomeLoginHouseOwner = ({cb1}) => {
       <View style={styles.lineView} />
       <View style={styles.lineView1} />
       <Text style={styles.orText}>Or</Text>
-      <Pressable style={styles.rectanglePressable} onPress={() => {}} />
+      <Pressable style={styles.rectanglePressable} onPress={() => { }} />
       <Text style={styles.loginWithFacebook}>Login with Facebook</Text>
       <Image
         style={styles.facebookLogoIcon}

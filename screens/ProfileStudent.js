@@ -1,33 +1,25 @@
 import * as React from "react";
-import { Image, StyleSheet, Text, View, ScrollView } from "react-native";
-import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
+import { Image, StyleSheet, Text, View, ScrollView,Pressable } from "react-native";
 import axios from "axios"
 import link from "../Link";
 import { useNavigation } from "@react-navigation/native";
 
 
-const Profile = (props) => {
+const ProfileStudent = (props) => {
   const navigation = useNavigation();
-  let data=props.route.params.userInfo
-console.log(props.route.params,'from the profile');
 
+  let data=props.route.params.userInfo[0]
+  console.log(data,'the d');
   return (
     <ScrollView>
       <View style={styles.profilContainer}>
         <View style={styles.profileView}>
-          <Text style={styles.user}>{data[0].fullName}</Text>
+          <Text style={styles.user}>{data.fullName}</Text>
           <Image
             style={styles.userIcon}
             resizeMode="cover"
-            source={{uri:data[0].photo}}
+            source={{uri:data.photo}}
           />
-          <Pressable
-          onPress={()=>navigation.navigate('House')}>
-            <Image 
-            style={{top:648,left:260,width:70,height:70}}
-            source={require('../assets/Profile/icons.png')}/>
-            <Text style={{left:230,top:664,fontSize:18}}>Add Your House..</Text>
-          </Pressable>
         </View>
         <View style={styles.lineView} />
 
@@ -37,36 +29,35 @@ console.log(props.route.params,'from the profile');
           source={require("../assets/Profile/vector10.png")}
         />
         <Text style={styles.usernameText}> Username : </Text>
-        <Text style={styles.UserName}> {data[0].fullName}</Text>
+        <Text style={styles.UserName}> {data.fullName}</Text>
         <Image
           style={styles.contactIcon}
           resizeMode="cover"
           source={require("../assets/Profile/contact1.png")}
         />
         <Text style={styles.contactText}>Contact : </Text>
-        <Text style={styles.numberText}>{data[0].phoneNumber}</Text>
+        <Text style={styles.numberText}>{data.phoneNumber}</Text>
         <Image
           style={styles.emailIcon}
           resizeMode="cover"
-          source={require("../assets/Profile/mail.png")}
+          source={require("../assets/Profile/email2.png")}
         />
         <Text style={styles.emailText}>Email : </Text>
-        <Text style={styles.emailText1}>{data[0].email}</Text>
-        
+        <Text style={styles.emailText1}>{data.email}</Text>
+        <Image
+          style={styles.genderIcon}
+          resizeMode="cover"
+          source={require("../assets/Profile/gender.png")}
+        />
+        <Text style={styles.genderArea}>Gender :</Text>
+        <Text style={styles.genderText}>{data.gender}</Text>
         <Image
           style={styles.calenderIcon}
           resizeMode="cover"
           source={require("../assets/Profile/calendar.png")}
         />
         <Text style={styles.dateArea}>Date of birth :</Text>
-        <Text style={styles.dateText}>{data[0].dateOfBirth}</Text>
-        <Image
-          style={styles.calenderIcon1}
-          resizeMode="cover"
-          source={require("../assets/Profile/location.png")}
-        />
-        <Text style={styles.dateArea1}>City</Text>
-        <Text style={styles.dateText1}>{`${data[0].city}`}</Text>
+        <Text style={styles.dateText}>{data.dateOfBirth}</Text>
 
         <View style={styles.lineView1} />
         {/* <Image
@@ -90,7 +81,6 @@ console.log(props.route.params,'from the profile');
           <Text style={{width:85,height:80,bottom:158,left:80,fontSize:18}}>Lougout</Text>
         </Pressable>
       </View>
-      
     </ScrollView>
   );
 };
@@ -250,14 +240,14 @@ const styles = StyleSheet.create({
   },
   calenderIcon: {
     position: "absolute",
-    top: "54%",
-    left: "6.5%",
+    top: "60%",
+    left: "6%",
     width: "10%",
-    height: "4.5%",
+    height: "4%",
   },
   dateArea: {
     position: "absolute",
-    top: "55%",
+    top: "60%",
     left: "20%",
     fontSize: 20,
     fontWeight: "700",
@@ -266,31 +256,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     position: "absolute",
-    top: "55%",
-    left: "59%",
-    fontSize: 18,
-    color: "#000",
-    textAlign: "left",
-  },
-  calenderIcon1: {
-    position: "absolute",
-    top: "62%",
-    left: "6.5%",
-    width: "10%",
-    height: "4.5%",
-  },
-  dateArea1: {
-    position: "absolute",
-    top: "62%",
-    left: "20%",
-    fontSize: 20,
-    fontWeight: "700",
-    color: "#000",
-    textAlign: "left",
-  },
-  dateText1: {
-    position: "absolute",
-    top: "62%",
+    top: "60.3%",
     left: "59%",
     fontSize: 18,
     color: "#000",
@@ -323,4 +289,4 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-export default Profile;
+export default ProfileStudent;

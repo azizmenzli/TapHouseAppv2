@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   splashscreenView: {
     position: "relative",
     borderRadius: 50,
-    backgroundColor: "#fff",
+    backgroundColor: "#E0E0E0",
     flex: 1,
     width: "100%",
     height: 852,

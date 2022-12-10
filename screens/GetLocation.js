@@ -41,7 +41,7 @@ export default function App() {
             
 
         })
-    console.log('cred',credential)}}
+    console.log('==>fromLocarionCred',credential)}}
         
         >
             <Callout>
@@ -53,7 +53,7 @@ export default function App() {
         />
         <Pressable
          style={styles.vectorPressable}
-         onPress={() => navigation.goBack()}>
+         onPress={() => navigation.navigate("House",{location:{latitude:credential.latitude,longitude:credential.longitude}})}>
             <Image
             style={styles.icon1}
             resizeMode="cover"
@@ -97,11 +97,11 @@ const styles = StyleSheet.create({
   },
   icon1: {
     height: "100%",
-    top:50,
-    left: 310,
+    top:60,
+    left: 110,
     width: "100%",
     maxWidth: "100%",
-    overflow: "hidden",
+    // overflow: "hidden",
     maxHeight: "100%",
   },
   vectorPressable: {

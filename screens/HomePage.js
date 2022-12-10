@@ -14,16 +14,18 @@ import axios from "axios";
 import link from "../Link"
 
 
-const HomePageStudent = () => {
+const HomePageStudent = (props) => {
 const navigation = useNavigation();
  
   const [items, setItems] = useState([]);
   useEffect(()=>{
     axios.get(`${link}/house/`).then((res)=>{
       setItems(res.data)
-      console.log(items,'items')}) 
+      }) 
 
   },[])
+  console.log(props.route.params,"from housepage==>");
+  let infoProfile=props.route.params.info
 
   return (
     <FlatGrid
@@ -35,7 +37,7 @@ const navigation = useNavigation();
       // fixed
       spacing={10}
       renderItem={({ item}) => (
-        <Pressable onPress={()=>navigation.navigate("Detail",{id:item.idhouse})}>
+        <Pressable onPress={()=>navigation.navigate("Detail",{id:item.idhouse,infoProf:props.route.params.info})}>
         <View style={[styles.itemContainer, { backgroundColor: "#C1C9CC" }]}>
           <Text style={styles.itemName}>{item.price}</Text>
           <Image
@@ -44,13 +46,22 @@ const navigation = useNavigation();
           source={{uri:item.photo}}/>
           <Text style={styles.itemCode}>{item.city}</Text>
         </View>
+        
         </Pressable>
+        
+
       )}
+      
     />
   );
 };
 
 const styles = StyleSheet.create({
+  icon: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 30,
+  },
 
   gridView: {
     marginTop: 65,

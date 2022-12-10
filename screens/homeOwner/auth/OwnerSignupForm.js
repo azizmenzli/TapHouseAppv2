@@ -1,27 +1,18 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-
-import {
-  Image,
-  StyleSheet,
-  Text,
-  Pressable,
-  TextInput,
-  View,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import axios from "axios";import {Image,StyleSheet,Text,Pressable,
+TextInput,View,TouchableOpacity,ScrollView} from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 import { useTogglePasswordVisibility } from "../../../hooks/TogglePassword.js";
-import DropDownPicker from "react-native-dropdown-picker";
-import { Datepicker as RNKDatepicker } from "@ui-kitten/components";
-import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import link from "../../../Link.js";
 
-const HouseOwnerRegister = (props,{cb1}) => {
+const HouseOwnerRegister = (props) => {
   const navigation = useNavigation();
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
+    const [image, setImage] = useState(null);
+    
+
   const [data, setData] = useState({
     fullName: "",
     email: "",
@@ -33,6 +24,8 @@ const HouseOwnerRegister = (props,{cb1}) => {
     photo:
       "https://media.istockphoto.com/id/1297349747/photo/hot-air-balloons-flying-over-the-botan-canyon-in-turkey.jpg?b=1&s=170667a&w=0&k=20&c=1oQ2rt0FfJFhOcOgJ8hoaXA5gY4225BA4RdOP1RRBz4=",
   });
+
+
   const handleChange = (value, name) => {
     setData({
       ...data,
@@ -40,21 +33,37 @@ const HouseOwnerRegister = (props,{cb1}) => {
     })
     props.cb(data.email)
   };
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   const handleSubmit = () => {
     axios
       .post(`${link}/owner/register`, data)
       .then((response) => {
-        console.log(response.data.insertId, "=====id");
-        navigation.navigate("ValidationScrenHomeOwner", {
-          id: response.data.insertId
-        });
-        console.log(response.data, "the data received");
+         props.cb1(response.data.insertId)
+        console.log(response.data.insertId, "=====id from sign up screen");
+        navigation.navigate("ValidationScrenHomeOwner");
+        console.log(response.data, "the data received... ");
       })
       .catch((error) => {
         console.log(error.message);
+       
       });
   };
-// console.log(props.cb1);
+
   return (
     <ScrollView>
       <View style={styles.houseOwnerRegisterView}>
@@ -81,7 +90,7 @@ const HouseOwnerRegister = (props,{cb1}) => {
         <TextInput
           style={styles.passwordInput}
           required
-          placeholder="  Password"
+          placeholder=" Password"
           autoCapitalize="none"
           keyboardType="default"
           // minLength={8}
@@ -113,7 +122,7 @@ const HouseOwnerRegister = (props,{cb1}) => {
         <TextInput
           style={styles.dateOfBirth}
           placeholder="  DateOfBirth"
-          keyboardType="phone-pad"
+          keyboardType="default"
           onChangeText={(text) => handleChange(text, "dateOfBirth")}
         />
 

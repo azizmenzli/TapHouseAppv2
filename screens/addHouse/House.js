@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import {
@@ -14,22 +14,39 @@ import {
 } from "react-native";
 import link from "../../Link";
 
-const House = ({navigation}) => {
-  const [values, setValues] = React.useState({
+const House = ({navigation,route}) => {
+  const [location,setLocation]=useState([])
+  const [values, setValues] =useState({
     photo: "https://media.istockphoto.com/id/1211174464/photo/beautiful-residential-home-exterior-on-bright-sunny-day-with-green-grass-and-blue-sky.jpg?s=612x612&w=0&k=20&c=h0XtWGD8asz_hfDVus7SWwOrtAFlZYfr7wdStKCQv14=",
     description: "",
     price: "",
-    latittude: "",
-    longitude: "",
+    latiude:0,
+    longitude: 0,
     adresse: "",
     city: "",
   });
+  console.log(route,'==>fromHouse');
+  // var info=route.params.location
+  // console.log(info,'ind');
+  useEffect(()=>{
+    // setLocation(route.params.location);
+   
+  },[])
   const handleChange = (name, value) => {
+    console.log( route.params.location,"mehdi");
+    // setValues({
+    //   ...values,
+      
+    // });
     setValues({
       ...values,
       [name]: value,
+      latiude: route.params.location.latitude,
+      longitude:route.params.location.longitude
     });
   };
+  
+  console.log(values,"=>")
     const handlePost = () =>{
       axios
       .post(`${link}:3001/house/add/${id}`,values)
@@ -42,7 +59,8 @@ const House = ({navigation}) => {
   }
 
       return (
-        <ScrollView>
+        <ScrollView
+        horizontal={true}>
           <View style={{top:40}}>           
             <TextInput
             placeholder="description"

@@ -9,7 +9,7 @@ import {
 } from 'react-native-confirmation-code-field';
 import axios from 'axios';
 import link from "../.././Link.js";
-// import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 
  const CELL_SIZE = 30;
@@ -40,8 +40,8 @@ const animateCell = ({hasValue, index, isFocused}) => {
   ]).start();
 };
 
-const ValidationScrenStudent = (props,{ route, navigation,cb }) => {
-  // const navigation = useNavigation();
+const ValidationScrenStudent = (props,{cb }) => {
+  const navigation = useNavigation();
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [ aymen, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -49,7 +49,7 @@ const ValidationScrenStudent = (props,{ route, navigation,cb }) => {
     setValue,
   });
   const [em,setEm]=useState(cb)
-  var {id} = route.params
+  
 
   const renderCell = ({index, symbol, isFocused}) => {
     const hasValue = Boolean(symbol);
@@ -90,16 +90,16 @@ const ValidationScrenStudent = (props,{ route, navigation,cb }) => {
       </AnimatedText>
     );
   };
-  console.log(id,"<====id");
+  
 
   return (
     <SafeAreaView style={styles.root}>
       <Text style={styles.title}>Verification</Text>
       <Image style={styles.icon} source={require("../.././assets/ValidationScreen/undrawCertification.png")} />
       <Text style={styles.subTitle}>
-        {cb.length? null : "Please enter the verification code we send to your email address:`Please enter your mail  and the verification code we send to your email address`"}
+        {props.cb.length? null : "Please enter the verification code we send to your email address:`Please enter your mail  and the verification code we send to your email address`"}
       </Text>
-           {cb.length ? null :<View style={styles.inputView} >
+           {props.cb.length ? null :<View style={styles.inputView} >
        <TextInput
         style={styles.inputText}
         placeholder="Email..."
@@ -118,7 +118,7 @@ const ValidationScrenStudent = (props,{ route, navigation,cb }) => {
       />
       <TouchableOpacity style={styles.nextButton} onPress={()=>{
         axios
-        .post(`${link}/student/check`, {activationCode:value,email:em, id: id})
+        .post(`${link}/student/check`, {activationCode:value,email:em})
         .then(resp=>{console.log(resp);
           navigation.navigate("WelcomeLoginStudent")}
         

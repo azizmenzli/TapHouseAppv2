@@ -21,8 +21,21 @@ const Detail = (props) => {
   const [ownerData, setOwnerData] = React.useState([])
 
   let id = props.route.params.id
-  console.log(idOwner, 'thedata')
-  console.log(ownerData, '');
+  console.log(props.route.params.infoProf[0].lookingFor, 'comiingFromTheDetail')
+  // console.log(ownerData, 'FromTheDetailView');
+
+  const checkUser=()=>{
+    if(props.route.params.infoProf[0].lookingFor){
+      navigation.navigate("ProfileStudent",{info:ownerData,userInfo:props.route.params.infoProf})
+    }
+    else if(!props.route.params.infoProf[0].lookingFor){
+      navigation.navigate("Profile",{info:ownerData,userInfo:props.route.params.infoProf})
+    }
+
+
+
+
+  }
 
   React.useEffect(() => {
 
@@ -45,12 +58,12 @@ const Detail = (props) => {
       <View style={styles.detailView}>
         <Pressable
           style={styles.ellipsePressable}
-          onPress={() => navigation.navigate("Profile")}
+          onPress={() => {checkUser()}}
         >
           <Image
             style={styles.icon}
             resizeMode="cover"
-            source={require("../assets/Detail/ellipse17.png")}
+            source={{uri:ownerData.photo}}
           />
         </Pressable>
 
@@ -99,7 +112,7 @@ const Detail = (props) => {
             />
           </View>
           <Pressable
-            onPress={() => alert('test')}>
+            onPress={() => Linking.openURL(`tel:${ownerData.phoneNumber}`)}>
             <Image
               style={styles.iconsaxLinearcallcalling}
               resizeMode="cover"
@@ -132,11 +145,12 @@ const styles = StyleSheet.create({
   icon: {
     width: "100%",
     height: "100%",
+    borderRadius: 30,
   },
   ellipsePressable: {
     position: "absolute",
-    left: 311,
-    top: 34,
+    left: 290,
+    top: 45,
     width: 76,
     height: 70,
   },
@@ -167,6 +181,7 @@ const styles = StyleSheet.create({
   icon1: {
     width: "100%",
     height: "100%",
+    top:30
   },
   vector21Pressable: {
     position: "absolute",
@@ -222,8 +237,8 @@ const styles = StyleSheet.create({
   },
   iconLocationPin: {
     position: "absolute",
-    height: "2.68%",
-    width: "4.21%",
+    height: "3%",
+    width: "5.2%",
     top: "44.77%",
     right: "85.64%",
     bottom: "51.54%",
@@ -234,11 +249,11 @@ const styles = StyleSheet.create({
   },
   images21Icon: {
     position: "absolute",
-    top: 153,
-    left: 41,
+    top: "15.5%",
+    left: "7.5%",
     borderRadius: 13,
-    width: 317,
-    height: 215,
+    width: "85%",
+    height: "28%",
   },
   ahmedZakriaText: {
     textDecoration: "underline",

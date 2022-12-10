@@ -9,14 +9,11 @@ import {
   View,
   ScrollView 
 } from "react-native";
-import { Datepicker as RNKDatepicker } from "@ui-kitten/components";
-import DropDownPicker from "react-native-dropdown-picker";
 import * as ImagePicker from 'expo-image-picker';
 
 import axios from "axios";
 import {useTogglePasswordVisibility} from "../../hooks/TogglePassword.js";
 import link from "../.././Link.js"
-import { log } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 
 const StudentRegister = (props,{route}) => {
@@ -134,7 +131,7 @@ const StudentRegister = (props,{route}) => {
       <TextInput
         style={styles.birthDate}
         placeholder="  Date of birth "
-        keyboardType="phone-pad"
+        keyboardType="default"
         onChangeText={text=>handleChange(text,"dateOfBirth")}
       />
       <TextInput

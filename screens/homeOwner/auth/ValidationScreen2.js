@@ -9,7 +9,8 @@ import {
 } from 'react-native-confirmation-code-field';
 import axios from 'axios';
 import link from "../../../Link.js";
-// import { useNavigation } from "@react-navigation/native";
+import { log } from 'react-native-reanimated';
+import { useNavigation } from "@react-navigation/native";
 
 
  const CELL_SIZE = 30;
@@ -40,16 +41,17 @@ const animateCell = ({hasValue, index, isFocused}) => {
   ]).start();
 };
 
-const ValidationScrenHomeOwner = (props,{ route, navigation,cb }) => {
-  // const navigation = useNavigation();
+const ValidationScrenHomeOwner = (props) => {
+  const navigation = useNavigation();
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [ aymen, getCellOnLayoutHandler] = useClearByFocusCell({
     ...value,
     setValue,
   });
-  const [em,setEm]=useState(cb)
-  var {id} = route.params
+  const [em,setEm]=useState(props.cb)
+     console.log(props,"aziz");
+    //  console.log(route,"aymen");
 
   const renderCell = ({index, symbol, isFocused}) => {
     const hasValue = Boolean(symbol);
@@ -90,16 +92,16 @@ const ValidationScrenHomeOwner = (props,{ route, navigation,cb }) => {
       </AnimatedText>
     );
   };
-  console.log(id,"<====id");
+  console.log(props.cb1,"<====id from verification");
 
   return (
     <SafeAreaView style={styles.root}>
       <Text style={styles.title}>Verification</Text>
       <Image style={styles.icon} source={require("../../../assets/ValidationScreen2/group9.png")} />
       <Text style={styles.subTitle}>
-        {cb.length? null : "Please enter the verification code we send to your email address:`Please enter your mail  and the verification code we send to your email address`"}
+        {props.cb.length? null : "Please enter the verification code we send to your email address:`Please enter your mail  and the verification code we send to your email address`"}
       </Text>
-           {cb.length ? null :<View style={styles.inputView} >
+           {props.cb.length ? null :<View style={styles.inputView} >
        <TextInput
         style={styles.inputText}
         placeholder="Email..."
@@ -118,7 +120,7 @@ const ValidationScrenHomeOwner = (props,{ route, navigation,cb }) => {
       />
       <TouchableOpacity style={styles.nextButton} onPress={()=>{
         axios
-        .post(`${link}/owner/check`, {activationCode:value,email:em, id: id})
+        .post(`${link}/owner/check`, {activationCode:value,email:em})
         .then(resp=>{console.log(resp);
           navigation.navigate("WelcomeLoginHouseOwner")}
         

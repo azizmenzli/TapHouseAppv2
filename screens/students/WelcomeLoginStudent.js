@@ -1,37 +1,46 @@
 import React, { useState } from "react";
-import {Text,StyleSheet,TouchableOpacity,Image, ScrollView,
-  Pressable,TouchableHighlight,View,} from "react-native";
+import {
+  Text, StyleSheet, TouchableOpacity, Image, ScrollView,
+  Pressable, TouchableHighlight, View,
+} from "react-native";
 import { TextInput as RNPTextInput } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTogglePasswordVisibility } from "../.././hooks/TogglePassword.js";
+import { useNavigation } from "@react-navigation/native";
+
 import axios from "axios";
 import link from "../.././Link.js";
 
-const WelcomeLoginStudent = ({ navigation}) => {
+const WelcomeLoginStudent = (props) => {
+  const navigation = useNavigation();
+
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
-     useTogglePasswordVisibility();
-     const [onLogin, setOnLogin] = useState({
-      email: "",
-      password: "",
+    useTogglePasswordVisibility();
+  const [onLogin, setOnLogin] = useState({
+    email: "",
+    password: "",
+  });
+  const handleChange = (value, name) => {
+    setOnLogin({
+      ...onLogin,
+      [name]: value,
     });
-    const handleChange = (value, name) => {
-      setOnLogin({
-        ...onLogin,
-        [name]: value,
-      });
-    };
-    const handleSubmit = () => { 
-      console.log(onLogin)
-      axios
-        .post(`${link}/student/login`, onLogin)
-        .then((response) => {
-          console.log(response.data);
-          setOnLogin(response.data)
-          navigation.navigate("HomePage")
-          console.log(onLogin,"2")
-        })
-        .catch((error)=> console.log(error.message))
-    };
+  };
+  const handleSubmit = () => {
+    console.log(onLogin)
+    axios
+      .post(`${link}/student/login`, onLogin)
+      .then((response) => {
+        console.log(response.data);
+        setOnLogin(response.data)
+        navigation.navigate("HomePageStudent", { info: response.data })
+        console.log(onLogin, "2")
+      })
+      .catch((error) => {if (error.message === "Request failed with status code 401") {
+        alert('Email or password is incorrect please check it again ..!')
+      }})
+  };
+  // console.log(props.cb1, "adhem")
   return (
 
     <View style={styles.welcomeLoginStudent}>
@@ -62,7 +71,7 @@ const WelcomeLoginStudent = ({ navigation}) => {
         theme={{ colors: { background: "#d9d9d9" } }}
         onChangeText={(text) => handleChange(text, "password")}
       />
-        <Pressable style={styles.eye} onPress={handlePasswordVisibility}>
+      <Pressable style={styles.eye} onPress={handlePasswordVisibility}>
         <MaterialCommunityIcons name={rightIcon} size={30} color="#44b3cc" />
       </Pressable>
       {/* <Image
@@ -75,6 +84,8 @@ const WelcomeLoginStudent = ({ navigation}) => {
         placeholder="Enter Your Email"
         mode="outlined"
         keyboardType="default"
+        autoCorrect={false}
+        autoCapitalize="none"
         theme={{ colors: { background: "#d9d9d9" } }}
         onChangeText={(text) => handleChange(text, "email")}
       />
@@ -104,7 +115,7 @@ const WelcomeLoginStudent = ({ navigation}) => {
       {/* <View style={styles.lineView} />
       <View style={styles.lineView1} /> */}
       <Text style={styles.orText}></Text>
-      <Pressable style={styles.rectanglePressable} onPress={() => {}} />
+      <Pressable style={styles.rectanglePressable} onPress={() => { }} />
       <Text style={styles.loginWithFacebook}>Login with Facebook</Text>
       <Image
         style={styles.facebookLogoIcon}
@@ -144,12 +155,12 @@ const styles = StyleSheet.create({
   welcomeBackText: {
     fontSize: 24,
     left: 50,
-    
-    
+
+
   },
   text: {
     fontSize: 20,
-   
+
   },
   welcomeBackText1: {
     position: "absolute",
@@ -354,7 +365,7 @@ const styles = StyleSheet.create({
   },
   eye: {
     left: "82%",
-    top: 398,
+    top: 330,
   },
 });
 
